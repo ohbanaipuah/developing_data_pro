@@ -1,0 +1,112 @@
+---
+title: "jw_team_form"
+author: "John"
+date: "10/4/2019"
+output: slidy_presentation
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+```
+
+# Slider 1
+
+## Slider 2
+
+## Slider 3
+
+## Slider 4            User Manuel for Shiny Interactive APP
+This App is a database App. To start to use this App, there are four entries.
+
+In the box provided, you are to respond to the question by typing your details.
+
+We created four textInput in the ui.R, that will request the user to input text asked and then the input will be reply by the server.r
+Below are the way to use the app:
+
+Sidebar with reactive input
+- At the prompt type the answer to the question.
+
+- Use the drop down to select your age.
+
+- click to add and then look at the right hand side of the app to see your entry
+Whenever a field is filled, it will aggregate all data
+from the form which is a reactive function
+
+- You can search or sort what you have added by typing the correct name entry.
+it will render all the date that has been added to the database of the form.
+
+
+##     Slider 4 Shiny Interative APP
+```{r,echo=FALSE}
+
+library(shiny)
+fields <- c("name","age","address","contact")
+
+ui <- fluidPage(
+  
+  titlePanel("JW Team Form"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      textInput("name","Your Name"),
+      selectInput("age","Age bracket",c("18-25","25-45","above 45")),
+      textInput("address","Please enter your address"),
+      textInput("contact","Please enter your contact"),
+      actionButton("save","Add")
+      
+    ),
+    
+    mainPanel(
+      mainPanel(
+        
+        DT::dataTableOutput("responses", width = 500), tags$hr()
+        
+      )
+    )
+  )
+)
+
+library(shiny)
+server <- function(input, output,session) {
+
+  saveData <- function(data) {
+    data <- as.data.frame(t(data))
+    if (exists("responses")) {
+      responses <<- rbind(responses, data)
+    } else {
+      responses <<- data
+    }
+  }
+  
+  loadData <- function() {
+    if (exists("responses")) {
+      responses
+    }
+  }
+  
+  formData <- reactive({
+    data <- sapply(fields, function(x) input[[x]])
+    data
+  })
+  
+  observeEvent(input$save, {
+    saveData(formData())
+  })
+  
+  output$responses <- DT::renderDataTable({
+    input$save
+    loadData()
+  })     
+}
+
+shinyApp(ui, server)
+```
+
+
+##   slider 5 Scatter Plot
+
+```{r, comment="",fig.align='center',fig.cap="Graph With Code Display"}
+plot(mtcars$mpg, mtcars$hp, xlab = "Mile per Gallon", ylab = "Hourse-power")
+```
+
+
