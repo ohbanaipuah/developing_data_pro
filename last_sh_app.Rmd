@@ -105,6 +105,7 @@ shinyApp(ui, server)
 
 ##   slider 5 Scatter Plot
 
+
 ```{r, comment="",fig.align='center',fig.cap="Graph With Code Display"}
 plot(mtcars$mpg, mtcars$hp, xlab = "Mile per Gallon", ylab = "Hourse-power")
 ```
